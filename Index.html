@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Penca | Licorería</title>
+    <!-- Tailwind CSS para el diseño -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración personalizada de Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Un negro medio claro (gris muy oscuro)
+                        'penca-dark': '#2c2c2c',
+                        'penca-medium': '#4a4a4a',
+                        'penca-light': '#f9fafb',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Iconos de FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Transiciones suaves para las vistas */
+        .page-section {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        .page-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Notificación Toast */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #2c2c2c;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 50;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+        }
+        #toast.show {
+            visibility: visible;
+            animation: fadeinToast 0.5s, fadeoutToast 0.5s 2.5s;
+        }
+        @keyframes fadeinToast {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+        @keyframes fadeoutToast {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+    </style>
+</head>
+<body class="bg-penca-light text-penca-dark font-sans flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <div class="flex items-center">
+                    <!-- Logo proporcionado -->
+                    <img src="image_513ed8.jpg" alt="La Penca Logo" class="h-16 w-auto rounded-lg object-contain cursor-pointer" onclick="navigateTo('inicio')">
+                    <span class="ml-3 text-2xl font-bold tracking-wider cursor-pointer" onclick="navigateTo('inicio')">LA PENCA</span>
+                </div>
+                <!-- Menú Desktop -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <button onclick="navigateTo('inicio')" class="nav-link text-penca-medium hover:text-black font-semibold transition-colors duration-200" data-target="inicio">Inicio</button>
+                    <button onclick="navigateTo('productos')" class="nav-link text-penca-medium hover:text-black font-semibold transition-colors duration-200" data-target="productos">Productos</button>
+                    <button onclick="navigateTo('contactar')" class="nav-link text-penca-medium hover:text-black font-semibold transition-colors duration-200" data-target="contactar">Contactar</button>
+                </div>
+                <!-- Botón Menú Móvil -->
+                <div class="flex items-center md:hidden">
+                    <button id="mobile-menu-btn" class="text-penca-dark hover:text-black focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Menú Móvil Desplegable -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <button onclick="navigateTo('inicio'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-penca-dark hover:bg-gray-100">Inicio</button>
+                <button onclick="navigateTo('productos'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-penca-dark hover:bg-gray-100">Productos</button>
+                <button onclick="navigateTo('contactar'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-penca-dark hover:bg-gray-100">Contactar</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="flex-grow">
+        
+        <!-- ================= PÁGINA: INICIO ================= -->
+        <section id="inicio" class="page-section active">
+            <!-- Hero Section -->
+            <div class="relative bg-penca-dark text-white">
+                <div class="absolute inset-0 bg-black opacity-40"></div>
+                <!-- Usando una imagen genérica elegante de fondo, o simplemente un fondo oscuro con textura CSS -->
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-48 flex flex-col items-center text-center">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6 uppercase tracking-widest">El buen gusto empieza aquí</h1>
+                    <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl">En La Penca te ofrecemos la mejor selección de licores puros, whiskys, rones y vinos para que tus celebraciones sean inolvidables.</p>
+                    <button onclick="navigateTo('productos')" class="bg-white text-penca-dark px-8 py-3 rounded-full font-bold uppercase tracking-wide hover:bg-gray-200 transition-transform transform hover:-translate-y-1 shadow-lg">
+                        Ver Catálogo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="py-16 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+                        <div class="p-6">
+                            <div class="text-4xl mb-4 text-penca-dark"><i class="fas fa-gem"></i></div>
+                            <h3 class="text-xl font-bold mb-2">Calidad Original</h3>
+                            <p class="text-penca-medium">Todos nuestros licores son 100% puros y de marcas reconocidas internacionalmente.</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="text-4xl mb-4 text-penca-dark"><i class="fas fa-tags"></i></div>
+                            <h3 class="text-xl font-bold mb-2">Precios Justos</h3>
+                            <p class="text-penca-medium">Ofrecemos los mejores precios del mercado para que disfrutes sin preocupaciones.</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="text-4xl mb-4 text-penca-dark"><i class="fas fa-truck"></i></div>
+                            <h3 class="text-xl font-bold mb-2">Atención Especializada</h3>
+                            <p class="text-penca-medium">Te asesoramos para elegir la bebida perfecta para tu evento o celebración.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PÁGINA: PRODUCTOS ================= -->
+        <section id="productos" class="page-section py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-penca-dark uppercase tracking-wider mb-4">Nuestra Selección</h2>
+                    <p class="text-penca-medium max-w-2xl mx-auto">Encuentra los licores más destacados a precios competitivos.</p>
+                </div>
+
+                <!-- Grid de Productos -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Producto 1: Johnnie Walker Red -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100 flex flex-col">
+                        <div class="h-64 bg-gray-100 flex items-center justify-center p-4">
+                            <img src="image_50d97a.png" alt="Johnnie Walker Red Label" class="h-full object-contain mix-blend-multiply">
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col">
+                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Whisky</span>
+                            <h3 class="text-lg font-bold text-penca-dark mb-2">Johnnie Walker Red Label</h3>
+                            <p class="text-sm text-penca-medium mb-4 flex-grow">El whisky escocés más vendido del mundo, famoso por su sabor acentuado y lleno de carácter.</p>
+                            <div class="flex justify-between items-center mt-auto">
+                                <span class="text-xl font-bold text-black">S/ 55.00</span>
+                                <button onclick="addToCart('Johnnie Walker Red Label')" class="bg-penca-dark text-white p-2 rounded-full hover:bg-black transition-colors" title="Añadir">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Producto 2: Johnnie Walker Black -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100 flex flex-col">
+                        <div class="h-64 bg-gray-100 flex items-center justify-center p-4">
+                            <img src="image_50d9a0.jpg" alt="Johnnie Walker Black Label" class="h-full object-contain mix-blend-multiply">
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col">
+                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Whisky</span>
+                            <h3 class="text-lg font-bold text-penca-dark mb-2">Johnnie Walker Black Label</h3>
+                            <p class="text-sm text-penca-medium mb-4 flex-grow">Un blend icónico con notas intensas a frutos oscuros, vainilla y un toque de humo.</p>
+                            <div class="flex justify-between items-center mt-auto">
+                                <span class="text-xl font-bold text-black">S/ 115.00</span>
+                                <button onclick="addToCart('Johnnie Walker Black Label')" class="bg-penca-dark text-white p-2 rounded-full hover:bg-black transition-colors" title="Añadir">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Producto 3: Vodka Smirnoff -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100 flex flex-col">
+                        <div class="h-64 bg-gray-100 flex items-center justify-center p-4">
+                            <img src="image_50d93f.png" alt="Vodka Smirnoff" class="h-full object-contain mix-blend-multiply">
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col">
+                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Vodka</span>
+                            <h3 class="text-lg font-bold text-penca-dark mb-2">Vodka Smirnoff No. 21</h3>
+                            <p class="text-sm text-penca-medium mb-4 flex-grow">El vodka premium más vendido del mundo, triplemente destilado y excepcionalmente puro.</p>
+                            <div class="flex justify-between items-center mt-auto">
+                                <span class="text-xl font-bold text-black">S/ 35.00</span>
+                                <button onclick="addToCart('Vodka Smirnoff No. 21')" class="bg-penca-dark text-white p-2 rounded-full hover:bg-black transition-colors" title="Añadir">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Producto 4: Flor de Caña -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100 flex flex-col">
+                        <div class="h-64 bg-gray-100 flex items-center justify-center p-4">
+                            <img src="image_50d921.png" alt="Ron Flor de Caña" class="h-full object-contain mix-blend-multiply">
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col">
+                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Ron</span>
+                            <h3 class="text-lg font-bold text-penca-dark mb-2">Flor de Caña Añejo Oro (4 Años)</h3>
+                            <p class="text-sm text-penca-medium mb-4 flex-grow">Ron nicaragüense, cuerpo ligero y un final suave, ideal para coctelería clásica.</p>
+                            <div class="flex justify-between items-center mt-auto">
+                                <span class="text-xl font-bold text-black">S/ 40.00</span>
+                                <button onclick="addToCart('Flor de Caña 4 Años')" class="bg-penca-dark text-white p-2 rounded-full hover:bg-black transition-colors" title="Añadir">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Producto 5: Cartavio -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100 flex flex-col">
+                        <div class="h-64 bg-gray-100 flex items-center justify-center p-4">
+                            <img src="https://placehold.co/400x400/eeeeee/2c2c2c?text=Ron+Cartavio" alt="Ron Cartavio Superior" class="h-full object-contain mix-blend-multiply">
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col">
+                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Ron</span>
+                            <h3 class="text-lg font-bold text-penca-dark mb-2">Ron Cartavio Superior</h3>
+                            <p class="text-sm text-penca-medium mb-4 flex-grow">El clásico ron peruano blanco, perfecto para preparar el tradicional Cuba Libre o Mojito.</p>
+                            <div class="flex justify-between items-center mt-auto">
+                                <span class="text-xl font-bold text-black">S/ 25.00</span>
+                                <button onclick="addToCart('Ron Cartavio Superior')" class="bg-penca-dark text-white p-2 rounded-full hover:bg-black transition-colors" title="Añadir">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Producto 6: Vino Tinto -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100 flex flex-col">
+                        <div class="h-64 bg-gray-100 flex items-center justify-center p-4">
+                            <img src="image_50d142.jpg" alt="Vino Casillero del Diablo" class="h-full object-contain mix-blend-multiply">
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col">
+                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Vino</span>
+                            <h3 class="text-lg font-bold text-penca-dark mb-2">Casillero del Diablo (Cabernet)</h3>
+                            <p class="text-sm text-penca-medium mb-4 flex-grow">Un vino tinto chileno estructurado con aromas a cerezas oscuras y toques de vainilla.</p>
+                            <div class="flex justify-between items-center mt-auto">
+                                <span class="text-xl font-bold text-black">S/ 45.00</span>
+                                <button onclick="addToCart('Vino Casillero del Diablo')" class="bg-penca-dark text-white p-2 rounded-full hover:bg-black transition-colors" title="Añadir">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- Producto 7: Vino Peruano -->
+                     <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100 flex flex-col">
+                        <div class="h-64 bg-gray-100 flex items-center justify-center p-4">
+                            <img src="image_50d1d8.png" alt="Vino Santiago Queirolo" class="h-full object-contain mix-blend-multiply">
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col">
+                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Vino</span>
+                            <h3 class="text-lg font-bold text-penca-dark mb-2">Santiago Queirolo Borgoña</h3>
+                            <p class="text-sm text-penca-medium mb-4 flex-grow">Vino dulce y afrutado de tradición peruana. Ideal para acompañar postres o beber solo.</p>
+                            <div class="flex justify-between items-center mt-auto">
+                                <span class="text-xl font-bold text-black">S/ 20.00</span>
+                                <button onclick="addToCart('Vino Queirolo Borgoña')" class="bg-penca-dark text-white p-2 rounded-full hover:bg-black transition-colors" title="Añadir">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PÁGINA: CONTACTAR ================= -->
+        <section id="contactar" class="page-section py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-penca-dark uppercase tracking-wider mb-4">Ponte en Contacto</h2>
+                    <p class="text-penca-medium max-w-2xl mx-auto">¿Tienes alguna duda, quieres hacer un pedido especial para un evento o necesitas asesoramiento? Escríbenos.</p>
+                </div>
+
+                <div class="flex flex-col lg:flex-row gap-12 bg-gray-50 rounded-2xl p-6 md:p-10 shadow-inner">
+                    
+                    <!-- Información de Contacto -->
+                    <div class="lg:w-1/3 flex flex-col space-y-8">
+                        <div>
+                            <h3 class="text-xl font-bold text-black mb-6">Información de la Tienda</h3>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-white p-3 rounded-full shadow-sm text-penca-dark">
+                                <i class="fas fa-map-marker-alt text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-bold text-black uppercase">Dirección</p>
+                                <p class="text-penca-medium mt-1">Av. Principal 123, Distrito de Lima<br>Lima, Perú</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-white p-3 rounded-full shadow-sm text-penca-dark">
+                                <i class="fas fa-phone text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-bold text-black uppercase">Teléfono / WhatsApp</p>
+                                <p class="text-penca-medium mt-1">+51 987 654 321</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-white p-3 rounded-full shadow-sm text-penca-dark">
+                                <i class="fas fa-envelope text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-bold text-black uppercase">Correo Electrónico</p>
+                                <p class="text-penca-medium mt-1">ventas@lapenca.pe</p>
+                            </div>
+                        </div>
+                        <div class="mt-auto pt-6 border-t border-gray-200">
+                            <p class="text-sm font-bold text-black uppercase mb-3">Síguenos</p>
+                            <div class="flex space-x-4">
+                                <a href="#" class="text-penca-medium hover:text-black text-2xl transition-colors"><i class="fab fa-facebook-square"></i></a>
+                                <a href="#" class="text-penca-medium hover:text-black text-2xl transition-colors"><i class="fab fa-instagram"></i></a>
+                                <a href="#" class="text-penca-medium hover:text-black text-2xl transition-colors"><i class="fab fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formulario -->
+                    <div class="lg:w-2/3 bg-white rounded-xl shadow-md p-6 md:p-8">
+                        <form onsubmit="event.preventDefault(); showToast('Mensaje enviado. Te contactaremos pronto.'); this.reset();">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label for="nombre" class="block text-sm font-medium text-penca-medium mb-2">Nombre Completo</label>
+                                    <input type="text" id="nombre" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-penca-dark focus:border-penca-dark outline-none transition-shadow bg-gray-50">
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-penca-medium mb-2">Correo Electrónico</label>
+                                    <input type="email" id="email" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-penca-dark focus:border-penca-dark outline-none transition-shadow bg-gray-50">
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <label for="asunto" class="block text-sm font-medium text-penca-medium mb-2">Asunto</label>
+                                <input type="text" id="asunto" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-penca-dark focus:border-penca-dark outline-none transition-shadow bg-gray-50">
+                            </div>
+                            <div class="mb-6">
+                                <label for="mensaje" class="block text-sm font-medium text-penca-medium mb-2">Mensaje</label>
+                                <textarea id="mensaje" rows="4" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-penca-dark focus:border-penca-dark outline-none transition-shadow bg-gray-50 resize-none"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-penca-dark text-white font-bold py-3 px-4 rounded-lg hover:bg-black transition-colors duration-300 shadow-md">
+                                Enviar Mensaje
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-penca-dark text-white pt-12 pb-8 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center md:items-start gap-8">
+                <!-- Logo e Info -->
+                <div class="flex flex-col items-center md:items-start text-center md:text-left">
+                    <div class="bg-white p-2 rounded-lg inline-block mb-4">
+                        <img src="image_513ed8.jpg" alt="La Penca Logo Footer" class="h-12 w-auto object-contain">
+                    </div>
+                    <span class="text-xl font-bold tracking-wider mb-2">LA PENCA</span>
+                    <p class="text-gray-400 text-sm max-w-xs">Tu licorería de confianza. Los mejores licores, la mejor atención, siempre cerca de ti.</p>
+                </div>
+                
+                <!-- Links rápidos -->
+                <div class="flex flex-col items-center md:items-start text-center md:text-left">
+                    <h4 class="text-lg font-bold mb-4">Enlaces</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><button onclick="navigateTo('inicio')" class="hover:text-white transition-colors">Inicio</button></li>
+                        <li><button onclick="navigateTo('productos')" class="hover:text-white transition-colors">Catálogo de Productos</button></li>
+                        <li><button onclick="navigateTo('contactar')" class="hover:text-white transition-colors">Contactar</button></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-10 pt-6 text-center text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center">
+                <p>&copy; 2024 La Penca Licorería. Todos los derechos reservados.</p>
+                <p class="mt-2 md:mt-0 text-xs">TOMAR BEBIDAS ALCOHÓLICAS EN EXCESO ES DAÑINO.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Contenedor del Toast Notificación -->
+    <div id="toast"></div>
+
+    <!-- Scripts para el comportamiento de la página -->
+    <script>
+        // Lógica de Navegación SPA (Single Page Application)
+        function navigateTo(pageId) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(pageId).classList.add('active');
+            
+            // Actualizar estilo de enlaces de navegación activos
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if(link.getAttribute('data-target') === pageId) {
+                    link.classList.remove('text-penca-medium');
+                    link.classList.add('text-black', 'border-b-2', 'border-black');
+                } else {
+                    link.classList.add('text-penca-medium');
+                    link.classList.remove('text-black', 'border-b-2', 'border-black');
+                }
+            });
+
+            // Scroll suave hacia arriba
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Lógica del menú móvil
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        function toggleMobileMenu() {
+            menu.classList.add('hidden');
+        }
+
+        // Lógica para añadir al carrito (Notificación Toast en lugar de alert)
+        function addToCart(productName) {
+            const message = ${productName} añadido al carrito.;
+            showToast(message);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.innerText = message;
+            toast.className = "show";
+            
+            // Ocultar después de 3 segundos
+            setTimeout(function(){ 
+                toast.className = toast.className.replace("show", ""); 
+            }, 3000);
+        }
+
+        // Inicializar vista
+        navigateTo('inicio');
+    </script>
+</body>
+</html>
